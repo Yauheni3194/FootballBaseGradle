@@ -2,19 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- 1. Этот тег делает шрифт крупным на телефоне -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>start page</title>
+
+    <!-- 2. Стили, чтобы по ссылкам было удобно попадать пальцем -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #f9f9f9;
+        }
+
+        /* Превращаем ссылки в красивые крупные кнопки */
+        .btn {
+            display: block;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-size: 18px; /* Крупный читаемый шрифт */
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Стиль для кнопки выхода (сделаем её серой или красной) */
+        .btn-logout {
+            background-color: #6c757d;
+        }
+
+        .btn-logout:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
 
-<a href="/players">Show all players</a>
-<br/>
-<hr/>
-<a href="/games">Show all games</a>
-<br/>
-<hr/>
-<a href="/places">Show all places</a>
-<br/>
-<hr/>
-<a href="/logout">logout</a>
+<!-- Убрали теги <br/> и <hr/>, теперь отступы делаются красиво через CSS -->
+<a href="/players" class="btn">Show all players</a>
+<a href="/games" class="btn">Show all games</a>
+<a href="/places" class="btn">Show all places</a>
+<a href="/logout" class="btn btn-logout">Logout</a>
+
 </body>
 </html>

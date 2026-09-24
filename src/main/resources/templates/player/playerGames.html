@@ -2,18 +2,114 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <!-- 1. Этот тег делает шрифт крупным и читаемым на телефоне -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Games</title>
+
+    <!-- 2. Стили, полностью скопированные и адаптированные под структуру истории игр -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        /* Контейнер для списка игр (точно такой же, как .games-list) */
+        .games-history-list {
+            margin-bottom: 30px;
+            padding-left: 0;
+            list-style: none; /* Убираем дефолтные маркеры, так как у нас блочные ссылки */
+        }
+
+        /* Каждая игра выглядит как отдельная кликабельная карточка с синим маркером */
+        .game-history-item a {
+            display: block;
+            background: white;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #212529;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid #007bff; /* Тот самый синий маркер слева */
+            transition: transform 0.1s, background-color 0.1s;
+        }
+
+        .game-history-item a:active, .game-history-item a:hover {
+            background-color: #f1f3f5;
+            transform: scale(0.99);
+        }
+
+        /* Сообщение, если у игрока еще нет сыгранных матчей */
+        .empty-message {
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        /* Стили для управляющих ссылок-кнопок внизу */
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-Играл:
-<ol th:if="${not #lists.isEmpty(games)}">
-    <li th:each="game : ${games}" th:text="${game.date}"></li>
-</ol>
-<p th:if="${#lists.isEmpty(games)}">Список игр пуст.</p>
-<hr/>
-<a href="javascript:void(0)" onclick="history.back();" class="btn btn-secondary">
-    &larr; Back
-</a>
-<br>
+
+<h1>Сыгранные игры:</h1>
+
+<!-- Сюда выводится список, если он не пустой -->
+<div th:if="${not #lists.isEmpty(games)}" class="games-history-list">
+    <!-- th:block генерирует чистую структуру без лишних вложенных элементов -->
+    <th:block th:each="game : ${games}">
+        <div class="game-history-item">
+            <!-- Ссылка кликабельна целиком и ведет на страницу конкретной игры -->
+            <a th:href="@{/games/{id}(id=${game.getId()})}" th:text="${game.getDate()}">game</a>
+        </div>
+    </th:block>
+</div>
+
+<!-- Если список пуст, плавно выводим красивую заглушку -->
+<p th:if="${#lists.isEmpty(games)}" class="empty-message">Список игр пуст.</p>
+
+<!-- Кнопка возврата по истории назад в таком же стиле -->
+<div class="actions">
+    <a href="javascript:void(0)" onclick="history.back();" class="btn btn-back">&larr; Back</a>
+</div>
+
 </body>
 </html>

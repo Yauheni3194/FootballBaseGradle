@@ -2,15 +2,87 @@
 <html xmlns:th="http://thymeleaf.org" lang="ru">
 <head>
   <meta charset="UTF-8">
+  <!-- 1. Этот тег автоматически адаптирует масштаб под экраны телефонов -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Доступ запрещен</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}"> <!-- Если есть стили -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 20px 15px; /* Отступы, чтобы карточка не липла к краям экрана */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh; /* Центрирует ошибку по вертикали на любом смартфоне */
+      box-sizing: border-box;
+    }
+    .error-container {
+      width: 100%;
+      max-width: 450px;
+      background: white;
+      padding: 40px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      box-sizing: border-box;
+    }
+    .error-icon {
+      font-size: 64px;
+      margin-bottom: 15px;
+      line-height: 1;
+    }
+    h1 {
+      color: #dc3545;
+      font-size: 36px;
+      margin: 0 0 10px 0;
+      font-weight: bold;
+    }
+    h2 {
+      color: #212529;
+      font-size: 18px;
+      margin: 0 0 15px 0;
+      line-height: 1.4;
+    }
+    p {
+      color: #6c757d;
+      font-size: 15px;
+      line-height: 1.5;
+      margin: 0 0 30px 0;
+    }
+    /* Крупная мобильная кнопка возврата */
+    .btn {
+      display: block;
+      padding: 14px 20px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #0056b3;
+    }
+
+    @media (min-width: 480px) {
+      .btn {
+        display: inline-block;
+        width: auto;
+      }
+    }
+  </style>
 </head>
 <body>
-<div style="text-align: center; margin-top: 100px;">
-  <h1>Ошибка 403</h1>
-  <h2>Упс! У вас нет прав для просмотра этой страницы. 🛑</h2>
-  <p>Эта зона предназначена только для администраторов.</p>
-  <a th:href="@{/}">Вернуться на главную</a>
+<div class="error-container">
+  <div class="error-icon">🛑</div>
+  <h1>403</h1>
+  <h2>У вас нет прав для просмотра этой страницы</h2>
+  <p>Эта зона имеет ограниченный уровень доступа и предназначена только для администраторов системы.</p>
+
+  <a th:href="@{/}" class="btn">Вернуться на главную</a>
 </div>
 </body>
 </html>

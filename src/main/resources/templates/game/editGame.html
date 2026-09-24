@@ -2,34 +2,168 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <!-- 1. Этот тег автоматически адаптирует масштаб под экраны телефонов -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 0 15px;
+      background-color: #f8f9fa;
+      color: #333;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #212529;
+    }
+
+    /* Адаптивная карточка для формы */
+    .form-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    /* Крупные поля ввода, удобные для нажатия пальцем */
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px; /* Защищает от автозума в браузерах смартфонов */
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      background-color: #fff;
+      color: #495057;
+    }
+
+    .form-control:focus {
+      border-color: #80bdff;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+
+    /* Подсветка локальных ошибок валидации полей */
+    .error-block {
+      color: #dc3545;
+      font-size: 14px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    /* Красивый блок для вывода глобальных ошибок */
+    .global-errors {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .global-errors p {
+      margin: 0;
+    }
+
+    /* Крупная кнопка отправки формы */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background-color: #ffc107; /* Желтый цвет для акцента на изменении */
+      color: #212529;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-submit:hover {
+      background-color: #e0a800;
+    }
+
+    /* Мобильная кнопка навигации назад */
+    .btn-back {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      background-color: #6c757d;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: bold;
+    }
+    .btn-back:hover {
+      background-color: #5a6268;
+    }
+  </style>
 </head>
 <body>
-<form th:method="POST" th:action="@{/games/{id}/edit(id=${game.getId()})}" th:object="${game}">
-  <!-- Новый блок для отображения глобальной ошибки из BindingResult -->
-  <div th:if="${#fields.hasGlobalErrors()}" style="color: red; font-weight: bold; margin-bottom: 15px;">
-    <!-- Перебираем глобальные ошибки и выводим их -->
-    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
-  </div>
-  <input type="hidden" th:field="*{id}" id="id">
-  <label for="place">Enter place:</label>
-  <select id="place" th:field="*{place}">
-    <option value="">-- Выберите место --</option>
-    <option th:each="p : ${places}"
-            th:value="${p.id}"
-            th:text="${p.name}">place</option>
-  </select>
-  <br>
-  <label for="date">Enter date: </label>
-  <input type="date" th:field="*{date}" id="date"/>
-  <div style="color:red" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date Error</div>
-  <br>
-  <label for="time">Enter time: </label>
-  <input type="time" th:field="*{time}" id="time"/>
-  <div style="color:red" th:if="${#fields.hasErrors('time')}" th:errors="*{time}">Time Error</div>
-  <br>
-  <input type="submit" value="Edit!" onclick="return confirm('Изменить игру?');"/>
-</form>
-<a th:href="@{/games/{id}(id=${game.getId()})}">Back</a>
+
+<h1>Редактирование игры</h1>
+
+<div class="form-container">
+  <!-- Вся логика валидации и отображения теперь работает корректно в контексте th:object -->
+  <form th:method="POST" th:action="@{/games/{id}/edit(id=${game.getId()})}" th:object="${game}">
+
+    <!-- ИСПРАВЛЕНО: Блок глобальных ошибок перемещен внутрь тега <form> -->
+    <div th:if="${#fields.hasGlobalErrors()}" class="global-errors">
+      <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+    </div>
+
+    <!-- Скрытое поле ID -->
+    <input type="hidden" th:field="*{id}" id="id">
+
+    <!-- Поле: Место проведения -->
+    <div class="form-group">
+      <label for="place">Enter place:</label>
+      <select id="place" th:field="*{place}" class="form-control">
+        <option value="">-- Выберите место --</option>
+        <option th:each="p : ${places}"
+                th:value="${p.id}"
+                th:text="${p.name}">place</option>
+      </select>
+    </div>
+
+    <!-- Поле: Дата -->
+    <div class="form-group">
+      <label for="date">Enter date:</label>
+      <input type="date" th:field="*{date}" id="date" class="form-control"/>
+      <div class="error-block" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date Error</div>
+    </div>
+
+    <!-- Поле: Время -->
+    <div class="form-group">
+      <label for="time">Enter time:</label>
+      <input type="time" th:field="*{time}" id="time" class="form-control"/>
+      <div class="error-block" th:if="${#fields.hasErrors('time')}" th:errors="*{time}">Time Error</div>
+    </div>
+
+    <input type="submit" value="Edit!" class="btn-submit" onclick="return confirm('Изменить игру?');"/>
+  </form>
+</div>
+
+<!-- Удобная кнопка возврата -->
+<a th:href="@{/games/{id}(id=${game.getId()})}" class="btn-back">Back</a>
+
 </body>
 </html>

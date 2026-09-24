@@ -1,72 +1,206 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org" xmlns:sec="http://thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://thymeleaf.org" xmlns:sec="http://thymeleaf.org/extras/spring-security" lang="ru">
 <head>
   <meta charset="UTF-8">
+  <!-- 1. Главный тег для адаптации масштаба на экранах телефонов -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>changeGameAsAdmin</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 15px;
+      background-color: #f8f9fa;
+      color: #333;
+      box-sizing: border-box;
+    }
+
+    h2, h3 {
+      color: #212529;
+      margin-top: 0;
+    }
+
+    /* Навигация и быстрые действия сверху */
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .top-actions a, .top-actions form {
+      flex: 1;
+    }
+    .btn-top {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: bold;
+      box-sizing: border-box;
+      width: 100%;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-edit {
+      background-color: #ffc107;
+      color: #212529;
+    }
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    /* Стилизация информационных блоков-карточек */
+    .admin-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+
+    ol {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+    li {
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    /* Оформление форм с выпадающими списками */
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px; /* Защищает от автозума в iOS */
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      box-sizing: border-box;
+      background-color: #fff;
+    }
+
+    /* Кнопки отправки форм */
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-add { background-color: #28a745; color: white; }
+    .btn-remove { background-color: #6c757d; color: white; }
+
+    /* Системные уведомления */
+    .alert {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 15px;
+    }
+    .alert-success { background-color: #d4edda; color: #155724; }
+    .alert-danger { background-color: #f8d7da; color: #721c24; font-weight: bold; }
+
+    .btn-back {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      background-color: #f1f3f5;
+      color: #495057;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: bold;
+      border: 1px solid #dee2e6;
+    }
+  </style>
 </head>
 <body>
-<a th:href="@{/games/{id}/edit(id=${game.getId()})}">Edit</a>
-<br/>
-<div th:if="${updateGame}" style="color: green;">
-  <p th:text="${updateGame}"></p>
-</div>
-<hr/>
-<form th:method="POST" th:action="@{/games/{id}/delete(id=${game.getId()})}">
-  <input type="submit" value="Delete" onclick="return confirm('Удалить игру?');"/>
-</form>
-<hr/>
-Участники:
-<ol th:if="${not #lists.isEmpty(players)}">
-  <li th:each="player : ${players}" th:text="${player.getName()}+' '+${player.getSurname()}"></li>
-</ol>
-<p th:if="${#lists.isEmpty(players)}">Никто не пришел</p>
-<br>
 
-<div th:if="${error}" style="color: red; font-weight: bold;">
-  <p th:text="${error}"></p>
+<!-- Быстрые действия (Редактировать / Удалить) -->
+<div class="top-actions">
+  <a th:href="@{/games/{id}/edit(id=${game.getId()})}" class="btn-top btn-edit">Edit</a>
+
+  <form th:method="POST" th:action="@{/games/{id}/delete(id=${game.getId()})}">
+    <input type="submit" value="Delete" class="btn-top btn-delete" onclick="return confirm('Удалить игру?');"/>
+  </form>
 </div>
-<div th:if="${success}" style="color: green;">
-  <p th:text="${success}"></p>
+
+<!-- Блок системных уведомлений об обновлении игры -->
+<div th:if="${updateGame}" class="alert alert-success">
+  <p th:text="${updateGame}" style="margin:0;"></p>
 </div>
-<hr/>
-<!-- Форма добавления игрока -->
-<form th:method="POST" th:action="@{/games/{id}/addPlayerAsAdmin(id=${game.getId()})}">
-  <label for="player-select">Добавить игрока в эту игру:</label>
-  <!-- Параметр name="playerId" — так мы поймаем ID игрока в Java-коде -->
-  <select name="playerId" id="player-select" required>
-    <option value="" th:if="${#lists.isEmpty(allFreePlayers)}">Все игроки уже добавлены</option>
-    <option value="" th:if="${!#lists.isEmpty(allFreePlayers)}">-- Выберите игрока --</option>
-    <!-- Цикл по списку игроков.
-         th:value отправляет ID выбранного игрока,
-         th:text показывает его имя в списке -->
-    <option th:each="player : ${allFreePlayers}"
-            th:value="${player.getId()}"
-            th:text="${player.getName()}+' '+${player.getSurname()}">
-      Имя игрока (заглушка)
-    </option>
-  </select>
-  <input type="submit" value="Пригласить в игру"/>
-</form>
-<br>
-<!-- Форма удаления игрока -->
-<form th:method="POST" th:action="@{/games/{id}/deletePlayerAsAdmin(id=${game.getId()})}">
-  <label for="player-select">Удалить игрока в из игры:</label>
-  <!-- Параметр name="playerId" — так мы поймаем ID игрока в Java-коде -->
-  <select name="playerId" id="player-delete" required>
-    <option value="" th:if="${#lists.isEmpty(players)}">Все игроки уже удалены</option>
-    <option value="" th:if="${!#lists.isEmpty(players)}">-- Выберите игрока --</option>
-    <!-- Цикл по списку игроков.
-         th:value отправляет ID выбранного игрока,
-         th:text показывает его имя в списке -->
-    <option th:each="player : ${players}"
-            th:value="${player.getId()}"
-            th:text="${player.getName()}+' '+${player.getSurname()}">
-      Имя игрока (заглушка)
-    </option>
-  </select>
-  <input type="submit" value="Удалить из игры"/>
-</form>
-<br>
-<a th:href="@{/games/{id}(id=${game.getId()})}">Back</a>
+
+<!-- Карточка со списком текущих участников -->
+<div class="admin-card">
+  <h3>Участники:</h3>
+  <ol th:if="${not #lists.isEmpty(players)}">
+    <li th:each="player : ${players}" th:text="${player.getName()}+' '+${player.getSurname()}"></li>
+  </ol>
+  <p th:if="${#lists.isEmpty(players)}" style="color: #666; font-style: italic;">Никто не пришел</p>
+
+  <!-- Уведомления об операциях с игроками -->
+  <div th:if="${error}" class="alert alert-danger">
+    <p th:text="${error}" style="margin:0;"></p>
+  </div>
+  <div th:if="${success}" class="alert alert-success">
+    <p th:text="${success}" style="margin:0;"></p>
+  </div>
+</div>
+
+<!-- Карточка добавления игрока (Админ) -->
+<div class="admin-card">
+  <form th:method="POST" th:action="@{/games/{id}/addPlayerAsAdmin(id=${game.getId()})}">
+    <div class="form-group">
+      <label for="player-select">Добавить игрока в эту игру:</label>
+      <select name="playerId" id="player-select" class="form-control" required>
+        <option value="" th:if="${#lists.isEmpty(allFreePlayers)}">Все игроки уже добавлены</option>
+        <option value="" th:if="${!#lists.isEmpty(allFreePlayers)}">-- Выберите игрока --</option>
+        <option th:each="player : ${allFreePlayers}"
+                th:value="${player.getId()}"
+                th:text="${player.getName()}+' '+${player.getSurname()}">
+          Имя игрока
+        </option>
+      </select>
+    </div>
+    <input type="submit" value="Пригласить в игру" class="btn-submit btn-add"/>
+  </form>
+</div>
+
+<!-- Карточка удаления игрока (Админ) -->
+<div class="admin-card">
+  <form th:method="POST" th:action="@{/games/{id}/deletePlayerAsAdmin(id=${game.getId()})}">
+    <div class="form-group">
+      <label for="player-delete">Удалить игрока из игры:</label>
+      <select name="playerId" id="player-delete" class="form-control" required>
+        <option value="" th:if="${#lists.isEmpty(players)}">Все игроки уже удалены</option>
+        <option value="" th:if="${!#lists.isEmpty(players)}">-- Выберите игрока --</option>
+        <option th:each="player : ${players}"
+                th:value="${player.getId()}"
+                text="" th:text="${player.getName()}+' '+${player.getSurname()}">
+          Имя игрока
+        </option>
+      </select>
+    </div>
+    <input type="submit" value="Удалить из игры" class="btn-submit btn-remove"/>
+  </form>
+</div>
+
+<!-- Кнопка возврата назад -->
+<a th:href="@{/games/{id}(id=${game.getId()})}" class="btn-back">Back</a>
+
 </body>
 </html>

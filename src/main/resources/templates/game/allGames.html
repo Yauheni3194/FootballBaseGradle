@@ -2,16 +2,101 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <!-- 1. Этот тег делает шрифт крупным и читаемым на телефоне -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Games</title>
+
+    <!-- 2. Стили для удобного отображения списка игр на смартфонах -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        /* Контейнер для списка игр */
+        .games-list {
+            margin-bottom: 30px;
+        }
+
+        /* Каждая игра выглядит как отдельная кликабельная карточка */
+        .game-item a {
+            display: block;
+            background: white;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #212529;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid #007bff; /* Синий маркер слева */
+            transition: transform 0.1s, background-color 0.1s;
+        }
+
+        .game-item a:active, .game-item a:hover {
+            background-color: #f1f3f5;
+            transform: scale(0.99);
+        }
+
+        /* Стили для управляющих ссылок-кнопок внизу */
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .btn-create {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-Игры:
-<div th:each="game : ${games}">
-    <a th:href="@{/games/{id}(id=${game.getId()})}" th:text="${game.getDate()}">game</a>
+
+<h1>Игры:</h1>
+
+<div class="games-list">
+    <!-- Использован служебный тег th:block, чтобы не плодить лишние div в разметке -->
+    <th:block th:each="game : ${games}">
+        <div class="game-item">
+            <a th:href="@{/games/{id}(id=${game.getId()})}" th:text="${game.getDate()}">game</a>
+        </div>
+    </th:block>
 </div>
-<hr/>
-<a href="/games/new">Create a new Game</a>
-<hr/>
-<a href="/">Back</a>
+
+<!-- Вместо тегов <hr/> теперь используются кнопки, сгруппированные внизу -->
+<div class="actions">
+    <a href="/games/new" class="btn btn-create">Create a new Game</a>
+    <a href="/" class="btn btn-back">Back</a>
+</div>
+
 </body>
 </html>

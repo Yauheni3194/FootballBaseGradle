@@ -2,17 +2,106 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <!-- 1. Этот тег автоматически адаптирует масштаб под экраны телефонов -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All players</title>
+
+    <!-- 2. Стили для удобного отображения списка игроков на смартфонах -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+            background-color: #f8f9fa;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            color: #212529;
+        }
+
+        /* Контейнер для списка игроков */
+        .players-list {
+            margin-bottom: 30px;
+        }
+
+        /* Каждый игрок выглядит как удобная кликабельная карточка */
+        .player-item a {
+            display: block;
+            background: white;
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #212529;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            border-left: 4px solid #17a2b8; /* Бирюзовый маркер игрока слева */
+            transition: transform 0.1s, background-color 0.1s;
+        }
+
+        .player-item a:active, .player-item a:hover {
+            background-color: #f1f3f5;
+            transform: scale(0.99);
+        }
+
+        /* Стили для кнопок навигации и создания */
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: block;
+            text-align: center;
+            padding: 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .btn-create {
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-<div th:each="player, iterStat : ${players}">
-    <a th:href="@{/players/{id}(id=${player.id})}"
-       th:text="|${iterStat.count}. ${player.surname} ${player.name}|">player</a>
+
+<h1>Список всех игроков:</h1>
+
+<div class="players-list">
+    <!-- Использован th:block, чтобы генерировать чистую верстку -->
+    <th:block th:each="player, iterStat : ${players}">
+        <div class="player-item">
+            <a th:href="@{/players/{id}(id=${player.id})}"
+               th:text="|${iterStat.count}. ${player.surname} ${player.name}|">player</a>
+        </div>
+    </th:block>
 </div>
-<hr/>
-<a href="/">Back to main page</a>
-<br>
-<hr/>
-<a href="/players/new">Create a new player</a>
+
+<!-- Заменили теги <hr/> и <br> на удобный блок кнопок -->
+<div class="actions">
+    <a href="/players/new" class="btn btn-create">Create a new player</a>
+    <a href="/" class="btn btn-back">Back to main page</a>
+</div>
+
 </body>
 </html>

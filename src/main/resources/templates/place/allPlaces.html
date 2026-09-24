@@ -2,16 +2,113 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <!-- 1. Этот тег автоматически адаптирует масштаб под экраны телефонов -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Places</title>
+
+  <!-- 2. Стили для удобного отображения списка мест на смартфонах -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 0 15px;
+      background-color: #f8f9fa;
+      color: #333;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 10px;
+      color: #212529;
+    }
+
+    /* Контейнер для списка мест */
+    .places-list {
+      margin-bottom: 30px;
+    }
+
+    /* Каждое место выглядит как удобная кликабельная карточка */
+    .place-item a {
+      display: flex;
+      align-items: center;
+      background: white;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #212529;
+      font-size: 16px;
+      font-weight: 500;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      border-left: 4px solid #28a745; /* Зеленый маркер локации слева */
+      transition: transform 0.1s, background-color 0.1s;
+    }
+
+    /* Добавим эмодзи-иконку перед названием места */
+    .place-item a::before {
+      content: "📍";
+      margin-right: 12px;
+      font-size: 18px;
+    }
+
+    .place-item a:active, .place-item a:hover {
+      background-color: #f1f3f5;
+      transform: scale(0.99);
+    }
+
+    /* Стили для кнопок навигации и создания */
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: bold;
+      box-sizing: border-box;
+    }
+
+    .btn-create {
+      background-color: #007bff;
+      color: white;
+      box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+    }
+
+    .btn-back {
+      background-color: #6c757d;
+      color: white;
+    }
+  </style>
 </head>
 <body>
-Места проведения игр:
-<div th:each="place : ${places}">
-  <a th:href="@{/places/{id}(id=${place.getId()})}" th:text="${place.getName()}">place</a>
+
+<h1>Места проведения игр:</h1>
+
+<div class="places-list">
+  <!-- Перебор списка мест через служебный th:block -->
+  <th:block th:each="place : ${places}">
+    <div class="place-item">
+      <a th:href="@{/places/{id}(id=${place.getId()})}" th:text="${place.getName()}">place</a>
+    </div>
+  </th:block>
 </div>
-<hr/>
-<a href="/">Back to main page</a>
-<hr/>
-<a href="/places/new">Create a new Place</a>
+
+<!-- Заменили теги <hr/> на аккуратный мобильный блок кнопок управления -->
+<div class="actions">
+  <a href="/places/new" class="btn btn-create">Create a new Place</a>
+  <a href="/" class="btn btn-back">Back to main page</a>
+</div>
+
 </body>
 </html>

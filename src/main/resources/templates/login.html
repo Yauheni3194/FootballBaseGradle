@@ -2,15 +2,54 @@
 <html xmlns:th="http://thymeleaf.org" lang="ru">
 <head>
   <meta charset="UTF-8">
+  <!-- 1. Этот тег решает проблему с мелким шрифтом на телефонах -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Вход в систему</title>
   <style>
-    body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f6f9; }
-    .login-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 320px; }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f6f9;
+      margin: 0; /* Убираем дефолтные отступы браузера */
+      padding: 10px; /* Чтобы на смартфонах форма не прилипала к краям экрана */
+      box-sizing: border-box;
+    }
+    .login-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%; /* Форма будет гибкой */
+      max-width: 340px; /* Но не станет шире 340px на ноутбуке */
+      box-sizing: border-box;
+    }
     h2 { text-align: center; color: #333; margin-bottom: 20px; }
     .input-group { margin-bottom: 15px; }
     .input-group label { display: block; margin-bottom: 5px; color: #666; font-size: 14px; }
-    .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-    .btn { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+    /* Увеличили padding до 12px для более удобного ввода на сенсорных экранах */
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 16px; /* Защита от автозума в iOS (на iPhone текст < 16px приближает экран при клике) */
+    }
+    /* Сделали кнопку чуть выше (padding: 12px), чтобы по ней было легче кликать */
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
     .btn:hover { background-color: #0056b3; }
     .error-message { color: red; font-size: 14px; text-align: center; margin-bottom: 15px; }
   </style>
@@ -28,7 +67,6 @@
   <form th:action="@{/login}" method="post">
     <div class="input-group">
       <label for="username">Имя и Фамилия</label>
-      <!-- Подсказка placeholder напомнит пользователю ввести данные через пробел -->
       <input type="text" id="username" name="username" placeholder="Иван Иванов" required autofocus/>
     </div>
 

@@ -2,28 +2,167 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <!-- 1. Этот тег автоматически адаптирует масштаб под экраны телефонов -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: #f8f9fa;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #212529;
+        }
+
+        /* Прогрессивная карточка профиля игрока */
+        .profile-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        /* Верхняя акцентная строка с именем */
+        .profile-header {
+            font-size: 22px;
+            font-weight: bold;
+            color: #111;
+            margin-bottom: 18px;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        .info-row {
+            font-size: 16px;
+            margin-bottom: 14px;
+            line-height: 1.5;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #f8f9fa;
+            padding-bottom: 8px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #6c757d;
+        }
+
+        .info-value {
+            color: #212529;
+        }
+
+        /* Блок управления кнопками */
+        .actions-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: block;
+            text-align: center;
+            padding: 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            box-sizing: border-box;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 123, 255, 0.15);
+        }
+        .btn-primary:hover { background-color: #0056b3; }
+
+        .btn-edit {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .btn-edit:hover { background-color: #e0a800; }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            box-shadow: 0 2px 6px rgba(220, 53, 69, 0.15);
+        }
+        .btn-delete:hover { background-color: #bd2130; }
+
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-back:hover { background-color: #5a6268; }
+    </style>
 </head>
 <body>
-    <a th:text="${player.getName()}+' '+${player.getSurname()}">player</a>
-    <br>
-    <a th:text="${player.getAge()}+' y.o.'">player</a>
-    <br>
-    <a th:text="'City: '+${player.getCity()}">player</a>
-    <br>
-    became a player: <a th:text="${player.getCreated()}">player</a>
-    <br>
-    last update: <a th:text="${player.getUpdated()}">player</a>
-    <br/>
-    <a th:href="@{/players/games/{id}(id=${player.getId()})}">Show all players games</a>
-    <hr/>
-    <a th:href="@{/players/{id}/edit(id=${player.getId()})}">Edit</a>
-    <br/>
-    <hr/>
+
+<h1>Профиль игрока</h1>
+
+<div class="profile-card">
+    <!-- Имя и фамилия выделены сверху -->
+    <div class="profile-header" th:text="${player.getName()}+' '+${player.getSurname()}">
+        Имя Фамилия
+    </div>
+
+    <div class="info-row">
+        <span class="info-label">Возраст:</span>
+        <span class="info-value" th:text="${player.getAge()}+' y.o.'">0 y.o.</span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-label">Город:</span>
+        <span class="info-value" th:text="${player.getCity()}">City</span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-label">Регистрация:</span>
+        <span class="info-value" th:text="${player.getCreated()}">Дата</span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-label">Обновление:</span>
+        <span class="info-value" th:text="${player.getUpdated()}">Дата</span>
+    </div>
+</div>
+
+<!-- Мобильное меню действий -->
+<div class="actions-group">
+    <!-- Кнопка просмотра матчей игрока -->
+    <a th:href="@{/players/games/{id}(id=${player.getId()})}" class="btn btn-primary">Show all player's games</a>
+
+    <!-- Редактирование -->
+    <a th:href="@{/players/{id}/edit(id=${player.getId()})}" class="btn btn-edit">Edit profile</a>
+
+    <!-- Удаление игрока -->
     <form th:method="POST" th:action="@{/players/{id}/delete(id=${player.getId()})}">
-        <input type="submit" value="DELETE player" onclick="return confirm('Удалить игрока?');"/>
-        </form>
-    <hr/>
-    <a href="/players">Back</a>
+        <input type="submit" value="DELETE player" class="btn btn-delete" onclick="return confirm('Удалить игрока?');"/>
+    </form>
+
+    <!-- Кнопка назад -->
+    <a href="/players" class="btn btn-back">Back to list</a>
+</div>
+
 </body>
 </html>

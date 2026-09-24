@@ -2,35 +2,172 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <!-- 1. Этот тег автоматически адаптирует масштаб под экраны телефонов -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 0 15px;
+            background-color: #f8f9fa;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #212529;
+        }
+
+        /* Адаптивная карточка для формы */
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        /* Крупные поля ввода под тач-интерфейс */
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px; /* Защищает от автозума в браузерах смартфонов */
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            background-color: #fff;
+            color: #495057;
+        }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+
+        /* Подсветка ошибок валидации Spring */
+        .error-block {
+            color: #dc3545;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* Блок для глобальных ошибок */
+        .global-errors {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .global-errors p {
+            margin: 0;
+        }
+
+        /* Крупная кнопка сохранения */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background-color: #ffc107; /* Желтый цвет для акцента на изменении */
+            color: #212529;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: #e0a800;
+        }
+
+        /* Мобильная кнопка навигации назад */
+        .btn-back {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
 
-<form th:method="POST" th:action="@{/players/{id}/edit(id=${player.getId()})}"  th:object="${player}">
-    <!-- Новый блок для отображения глобальной ошибки из BindingResult -->
-    <div th:if="${#fields.hasGlobalErrors()}" style="color: red; font-weight: bold; margin-bottom: 15px;">
-        <!-- Перебираем глобальные ошибки и выводим их -->
-        <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
-    </div>
-    <input type="hidden" th:field="*{id}" id="id">
-    <label for="name">Enter name: </label>
-    <input type="text" th:field="*{name}" id="name"/>
-    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
-    <br/>
-    <label for="surname">Enter surname: </label>
-    <input type="text" th:field="*{surname}" id="surname"/>
-    <div style="color:red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</div>
-    <br/>
-    <label for="age">Enter age: </label>
-    <input type="text" th:field="*{age}" id="age"/>
-    <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
-    <br/>
-    <label for="city">Enter city: </label>
-    <input type="text" th:field="*{city}" id="city"/>
-    <div style="color:red" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">City Error</div>
-    <br/>
-    <input type="submit" value="Edit!" onclick="return confirm('Изменить игрока?');"/>
-</form>
-<a th:href="@{/players/{id}(id=${player.getId()})}">Back</a>
+<h1>Редактирование игрока</h1>
+
+<div class="form-container">
+    <form th:method="POST" th:action="@{/players/{id}/edit(id=${player.getId()})}" th:object="${player}">
+
+        <!-- ИСПРАВЛЕНО: Блок глобальных ошибок перемещен внутрь тега <form> -->
+        <div th:if="${#fields.hasGlobalErrors()}" class="global-errors">
+            <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+        </div>
+
+        <!-- Скрытое поле ID -->
+        <input type="hidden" th:field="*{id}" id="id">
+
+        <!-- Поле: Имя -->
+        <div class="form-group">
+            <label for="name">Enter name:</label>
+            <input type="text" th:field="*{name}" id="name" class="form-control"/>
+            <div class="error-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+        </div>
+
+        <!-- Поле: Фамилия -->
+        <div class="form-group">
+            <label for="surname">Enter surname:</label>
+            <input type="text" th:field="*{surname}" id="surname" class="form-control"/>
+            <div class="error-block" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</div>
+        </div>
+
+        <!-- Поле: Возраст -->
+        <div class="form-group">
+            <label for="age">Enter age:</label>
+            <!-- На смартфонах type="number" сразу откроет числовую клавиатуру -->
+            <input type="number" th:field="*{age}" id="age" class="form-control" min="1" max="120"/>
+            <div class="error-block" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
+        </div>
+
+        <!-- Поле: Город -->
+        <div class="form-group">
+            <label for="city">Enter city:</label>
+            <input type="text" th:field="*{city}" id="city" class="form-control"/>
+            <div class="error-block" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">City Error</div>
+        </div>
+
+        <!-- Кнопка сохранения с диалоговым окном подтверждения -->
+        <input type="submit" value="Edit!" class="btn-submit" onclick="return confirm('Изменить игрока?');"/>
+    </form>
+</div>
+
+<!-- Ссылка возврата в профиль игрока -->
+<a th:href="@{/players/{id}(id=${player.getId()})}" class="btn-back">Back</a>
+
 </body>
 </html>

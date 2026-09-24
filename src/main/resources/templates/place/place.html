@@ -2,27 +2,154 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <!-- 1. Главный тег для адаптации масштаба на экранах телефонов -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Place</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 15px;
+      background-color: #f8f9fa;
+      color: #333;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #212529;
+    }
+
+    /* Карточка с детальной информацией */
+    .info-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 25px;
+    }
+
+    .info-row {
+      font-size: 16px;
+      margin-bottom: 14px;
+      line-height: 1.5;
+      border-bottom: 1px solid #f1f3f5;
+      padding-bottom: 8px;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .info-label {
+      font-weight: bold;
+      color: #495057;
+      display: block;
+      font-size: 14px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .info-value {
+      font-size: 16px;
+      color: #212529;
+    }
+
+    /* Интерактивные ссылки для телефона и адреса */
+    .info-value a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    /* Сетка управляющих кнопок */
+    .action-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: bold;
+      box-sizing: border-box;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .btn-edit {
+      background-color: #ffc107;
+      color: #212529;
+    }
+
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-back {
+      background-color: #6c757d;
+      color: white;
+    }
+  </style>
 </head>
 <body>
-Name: <a th:text="${place.getName()}">place</a>
-<br>
-Address: <a th:text="${place.getAddress()}">place</a>
-<br>
-Administrator phone number: <a th:text="${place.getAdministrator_phone_number()}">place</a>
-<br>
-Place was created: <a th:text="${place.getCreated()}">place</a>
-<br>
-last update: <a th:text="${place.getUpdated()}">place</a>
-<br/>
-<hr/>
-<a th:href="@{/places/{id}/edit(id=${place.getId()})}">Edit</a>
-<br/>
-<hr/>
-<form th:method="POST" th:action="@{/places/{id}/delete(id=${place.getId()})}">
-  <input type="submit" value="DELETE place" onclick="return confirm('Удалить место?');"/>
-</form>
-<hr/>
-<a th:href="@{/places}">Back</a>
+
+<h1>Детали локации</h1>
+
+<div class="info-card">
+  <div class="info-row">
+    <span class="info-label">Name:</span>
+    <span class="info-value" th:text="${place.getName()}">Название</span>
+  </div>
+
+  <div class="info-row">
+    <span class="info-label">Address:</span>
+    <!-- Ссылка ведет в гео-поиск карт на телефоне -->
+    <span class="info-value">
+      <a th:href="'geo:0,0?q=' + ${place.getAddress()}" th:text="${place.getAddress()}">Адрес</a>
+    </span>
+  </div>
+
+  <div class="info-row">
+    <span class="info-label">Administrator phone:</span>
+    <!-- Префикс tel: позволяет сразу позвонить с мобильного при клике -->
+    <span class="info-value">
+      <a th:href="'tel:' + ${place.getAdministrator_phone_number()}" th:text="${place.getAdministrator_phone_number()}">Телефон</a>
+    </span>
+  </div>
+
+  <div class="info-row">
+    <span class="info-label">Created:</span>
+    <span class="info-value" th:text="${place.getCreated()}">Дата создания</span>
+  </div>
+
+  <div class="info-row">
+    <span class="info-label">Last update:</span>
+    <span class="info-value" th:text="${place.getUpdated()}">Обновлено</span>
+  </div>
+</div>
+
+<!-- Блок кнопок управления, адаптированный под тач-интерфейс -->
+<div class="action-group">
+  <a th:href="@{/places/{id}/edit(id=${place.getId()})}" class="btn btn-edit">Edit Place</a>
+
+  <form th:method="POST" th:action="@{/places/{id}/delete(id=${place.getId()})}">
+    <input type="submit" value="DELETE place" class="btn btn-delete" onclick="return confirm('Удалить место?');"/>
+  </form>
+
+  <a th:href="@{/places}" class="btn btn-back">Back to list</a>
+</div>
+
 </body>
 </html>
