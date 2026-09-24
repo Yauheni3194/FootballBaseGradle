@@ -1,10 +1,12 @@
 package by.kovalevskiy.FootballBaseGradle.services;
 
+import by.kovalevskiy.FootballBaseGradle.exception.PlayerNotFoundException;
 import by.kovalevskiy.FootballBaseGradle.exception.UserAlreadyExistsException;
 import by.kovalevskiy.FootballBaseGradle.model.Game;
 import by.kovalevskiy.FootballBaseGradle.model.Player;
 import by.kovalevskiy.FootballBaseGradle.model.Status;
 import by.kovalevskiy.FootballBaseGradle.repositories.PlayerRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +22,12 @@ import java.util.Optional;
 public class PlayerService {
     private final PlayerRepository playerRepository;
     private final JdbcTemplate jdbcTemplate;
+    private final ModelMapper modelMapper;
 
-    public PlayerService(PlayerRepository playerRepository, JdbcTemplate jdbcTemplate) {
+    public PlayerService(PlayerRepository playerRepository, JdbcTemplate jdbcTemplate, ModelMapper modelMapper) {
         this.playerRepository = playerRepository;
         this.jdbcTemplate = jdbcTemplate;
+        this.modelMapper = modelMapper;
     }
 
     public List<Player> showAllPlayers() {
@@ -45,11 +49,10 @@ public class PlayerService {
 
     @Transactional
     public void updatePlayer(Player player) {
-        //TODO ПОМЕНЯТЬ ЛОГИКУ СРАВНЕНИЯ. ЧЕРЕЗ "AndIdNot"
-        player.setUpdated(LocalDate.now());
-        if (!playerRepository.existsByNameAndSurname(player.getName(), player.getSurname())){
-            jdbcTemplate.update("update player set name=?, surname=?, age=?, city=?, updated=? where id=?",
-                    player.getName(), player.getSurname(), player.getAge(), player.getCity(), player.getUpdated(), player.getId());
+        if (!playerRepository.existsByNameAndSurnameAndIdNot(player.getName(), player.getSurname(), player.getId())){
+            Player playerDB = playerRepository.findById(player.getId()).orElseThrow(PlayerNotFoundException::new);
+            modelMapper.map(player,playerDB);
+            playerRepository.save(playerDB);
         }else {throw new UserAlreadyExistsException ("Пользователь с таким именем и фамилией уже существует");
         }
     }

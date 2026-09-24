@@ -124,13 +124,14 @@
 <div class="form-container">
     <form th:method="POST" th:action="@{/players/{id}/edit(id=${player.getId()})}" th:object="${player}">
 
-        <!-- ИСПРАВЛЕНО: Блок глобальных ошибок перемещен внутрь тега <form> -->
+        <!-- Блок глобальных ошибок -->
         <div th:if="${#fields.hasGlobalErrors()}" class="global-errors">
             <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
         </div>
 
-        <!-- Скрытое поле ID -->
+        <!-- Скрытые поля для сохранения системных данных при отправке -->
         <input type="hidden" th:field="*{id}" id="id">
+        <input type="hidden" th:field="*{role}" id="role">
 
         <!-- Поле: Имя -->
         <div class="form-group">
@@ -149,7 +150,6 @@
         <!-- Поле: Возраст -->
         <div class="form-group">
             <label for="age">Enter age:</label>
-            <!-- На смартфонах type="number" сразу откроет числовую клавиатуру -->
             <input type="number" th:field="*{age}" id="age" class="form-control" min="1" max="120"/>
             <div class="error-block" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
         </div>
@@ -161,7 +161,24 @@
             <div class="error-block" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">City Error</div>
         </div>
 
-        <!-- Кнопка сохранения с диалоговым окном подтверждения -->
+        <!-- ИСПРАВЛЕНО: Блок управления правами администратора теперь внутри формы -->
+        <div class="admin-controls" style="margin-bottom: 20px; border-top: 1px solid #dee2e6; padding-top: 15px;">
+            <!-- Кнопка отображается, если игрок НЕ админ. Передает параметр action=grant -->
+            <button th:if="${player.role != 'ADMIN'}" type="submit" name="action" value="grant" class="btn-admin-grant"
+                    style="width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer;"
+                    onclick="return confirm('Назначить этого игрока администратором?');">
+                Сделать админом
+            </button>
+
+            <!-- Кнопка отображается, если игрок УЖЕ админ. Передает параметр action=revoke -->
+            <button th:if="${player.role == 'ADMIN'}" type="submit" name="action" value="revoke" class="btn-admin-revoke"
+                    style="width: 100%; padding: 12px; background-color: #dc3545; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer;"
+                    onclick="return confirm('Вы уверены, что хотите снять права администратора?');">
+                Лишить прав админа
+            </button>
+        </div>
+
+        <!-- Кнопка сохранения обычных изменений страницы -->
         <input type="submit" value="Edit!" class="btn-submit" onclick="return confirm('Изменить игрока?');"/>
     </form>
 </div>

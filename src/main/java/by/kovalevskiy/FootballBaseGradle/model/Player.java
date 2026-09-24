@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -21,6 +24,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Player {
     @ManyToMany
     @JoinTable(name = "player_2_game",
@@ -47,9 +51,11 @@ public class Player {
     @NotEmpty(message = "city should not be empty")
     @Column(name = "city")
     private String city;
-    @Column(name = "created")
+    @CreatedDate
+    @Column(name = "created", updatable = false, nullable = false)
     private LocalDate created;
-    @Column(name = "updated")
+    @LastModifiedDate
+    @Column(name = "updated", nullable = false)
     private LocalDate updated;
     @Column(name = "password")
     private String password;

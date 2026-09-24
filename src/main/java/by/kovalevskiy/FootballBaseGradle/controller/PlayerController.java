@@ -69,9 +69,15 @@ public class PlayerController {
     }
 
     @PostMapping ("/{id}/edit")
-    public String updatePlayer (@ModelAttribute("player") @Valid Player player, BindingResult bindingResult){
+    public String updatePlayer (@ModelAttribute("player") @Valid Player player, BindingResult bindingResult,
+                                @RequestParam(value = "action", required = false) String action){
         if (bindingResult.hasErrors()){
             return "player/editPlayer";
+        }
+        if ("grant".equals(action)) {
+            player.setRole("ADMIN");
+        } else if ("revoke".equals(action)) {
+            player.setRole("USER");
         }
         try {playerService.updatePlayer(player);}
         catch (UserAlreadyExistsException e) {
@@ -79,8 +85,7 @@ public class PlayerController {
                     "Пользователь с таким именем и фамилией уже существует");
             return "player/editPlayer";
         }
-
-        return "redirect:/players";
+        return "redirect:/players/"+player.getId();
     }
 
     @GetMapping ("/games/{id}")

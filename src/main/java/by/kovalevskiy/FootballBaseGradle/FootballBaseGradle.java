@@ -1,5 +1,6 @@
 package by.kovalevskiy.FootballBaseGradle;
 
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,8 @@ public class FootballBaseGradle {
 
 	@Bean
 	public ModelMapper modelMapper(){
-		return new ModelMapper();
+		ModelMapper mapper = new ModelMapper();
+		mapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+		return mapper;
 	}
 }

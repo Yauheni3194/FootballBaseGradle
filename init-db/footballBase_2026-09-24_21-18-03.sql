@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict KG1VqWf9PwOlgJ0b4KaE7hGTOwozkokFC0yRxljvs3xVMTR9g7ghFRUe91pfdK9
+\restrict q0kM6MswVQt16fjhgy5SmbhdJnzdC6qHHUptaJ4iuXb4meAEHesbrvAmtZ2Ahnn
 
 -- Dumped from database version 17.11
 -- Dumped by pg_dump version 17.11
@@ -188,8 +188,8 @@ COPY public.game (id, date, "time", status, created, updated, place_id) FROM std
 30	2026-06-10	19:30:00	Passed	2026-08-20	2026-09-18	1
 61	2026-08-26	19:30:00	Passed	2026-08-25	2026-09-18	1
 63	2026-09-09	19:30:00	Passed	2026-09-10	2026-09-18	1
-62	2026-09-02	19:30:00	Passed	2026-09-02	2026-09-23	1
-74	2026-09-23	19:30:00	Passed	2026-09-18	2026-09-23	2
+62	2026-09-02	19:30:00	Passed	2026-09-02	2026-09-18	1
+74	2026-09-23	19:30:00	Passed	2026-09-18	2026-09-24	2
 \.
 
 
@@ -222,12 +222,12 @@ COPY public.player (id, name, surname, age, city, created, updated, role, passwo
 71	Паша	Банцевич	32	Гродно	2026-08-20	2026-08-20	USER	$2a$12$ZthRbx/wfp2CxZWlxS0aZ.Alm5QUBBs77/ElBmLGXLIY8N23v2qEC	t
 72	Роман	Санюк	32	Гродно	2026-08-20	2026-08-20	USER	$2a$12$ZthRbx/wfp2CxZWlxS0aZ.Alm5QUBBs77/ElBmLGXLIY8N23v2qEC	t
 74	Сергей	Мисюкевич	32	Гродно	2026-08-20	2026-08-20	USER	$2a$12$ZthRbx/wfp2CxZWlxS0aZ.Alm5QUBBs77/ElBmLGXLIY8N23v2qEC	t
-73	Саша	Амброжевич	32	Гродно	2026-08-20	2026-08-20	USER	$2a$12$yVe7JAVE0wsmKQRkDVcjp.V2TOzcE2Uw9zUNSl1plgFl52aZU4fq2	t
 60	Евгений	Кудзеля	32	Гродно	2026-08-20	2026-09-02	USER	$2a$12$ZthRbx/wfp2CxZWlxS0aZ.Alm5QUBBs77/ElBmLGXLIY8N23v2qEC	t
 65	Дмитрий	Толкачёв	32	Гродно	2026-08-20	2026-09-02	USER	$2a$12$ZthRbx/wfp2CxZWlxS0aZ.Alm5QUBBs77/ElBmLGXLIY8N23v2qEC	t
 83	Денис	Шеляг	32	Гродно	2026-09-06	2026-09-10	USER	$2a$12$ZthRbx/wfp2CxZWlxS0aZ.Alm5QUBBs77/ElBmLGXLIY8N23v2qEC	t
 56	Сергей	Дудко	32	Гродно	2026-08-17	2026-08-17	USER	$2a$12$d0lagd0nOoCaz.7GA91UNeJdm2jfavOQBaV9NR4nA.G/kFE8sJwkS	t
 51	Евгений	Ковалевский	32	Гродно	2026-08-17	2026-08-17	ADMIN	$2a$12$0OoMm2b8nbuAXALHPWkjwO9P1px9fMbr9bOKXQ2/wRfMpgAnzoeyS	t
+73	Саша	Амброжевич	32	Гродно	2026-08-20	2026-09-24	USER	$2a$12$yVe7JAVE0wsmKQRkDVcjp.V2TOzcE2Uw9zUNSl1plgFl52aZU4fq2	t
 \.
 
 
@@ -243,7 +243,6 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 63	29
 59	29
 71	29
-73	29
 64	29
 51	29
 51	30
@@ -252,12 +251,10 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 64	30
 72	30
 59	30
-73	30
 65	30
 66	30
 69	30
 51	31
-73	31
 74	31
 72	31
 71	31
@@ -285,7 +282,6 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 71	33
 67	33
 72	33
-73	33
 69	33
 56	33
 68	33
@@ -302,7 +298,6 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 65	34
 69	34
 70	34
-73	34
 51	35
 68	35
 63	35
@@ -314,7 +309,6 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 59	35
 69	35
 66	35
-73	35
 51	36
 64	36
 72	36
@@ -323,7 +317,6 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 70	36
 63	36
 71	36
-73	36
 66	36
 51	37
 70	37
@@ -335,7 +328,6 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 72	37
 69	37
 59	37
-73	37
 66	37
 51	38
 64	38
@@ -350,7 +342,6 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 61	38
 72	38
 66	38
-73	38
 60	38
 56	39
 61	39
@@ -360,7 +351,6 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 64	39
 60	39
 69	39
-73	39
 72	39
 74	39
 51	39
@@ -370,7 +360,6 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 60	61
 69	61
 74	61
-73	61
 61	61
 72	61
 62	61
@@ -396,7 +385,6 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 57	62
 62	62
 51	63
-73	63
 71	63
 56	63
 57	63
@@ -415,23 +403,35 @@ COPY public.player_2_game (player_id, game_id) FROM stdin;
 60	64
 56	64
 68	64
-73	64
 64	64
 83	64
 69	64
 51	64
 51	74
-73	74
-71	74
-67	74
 83	74
 59	74
+67	74
 60	74
 70	74
 63	74
+71	74
 56	74
 57	74
 69	74
+73	36
+73	38
+73	33
+73	35
+73	31
+73	63
+73	39
+73	30
+73	37
+73	34
+73	64
+73	74
+73	61
+73	29
 \.
 
 
@@ -446,7 +446,7 @@ SELECT pg_catalog.setval('public.comment_id_seq', 67, true);
 -- Name: game_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.game_id_seq', 79, true);
+SELECT pg_catalog.setval('public.game_id_seq', 78, true);
 
 
 --
@@ -547,5 +547,5 @@ ALTER TABLE ONLY public.player_2_game
 -- PostgreSQL database dump complete
 --
 
-\unrestrict KG1VqWf9PwOlgJ0b4KaE7hGTOwozkokFC0yRxljvs3xVMTR9g7ghFRUe91pfdK9
+\unrestrict q0kM6MswVQt16fjhgy5SmbhdJnzdC6qHHUptaJ4iuXb4meAEHesbrvAmtZ2Ahnn
 
