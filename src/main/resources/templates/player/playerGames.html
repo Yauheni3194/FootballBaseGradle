@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Games</title>
+</head>
+<body>
+Играл:
+<ol th:if="${not #lists.isEmpty(games)}">
+    <li th:each="game : ${games}" th:text="${game.date}"></li>
+</ol>
+<p th:if="${#lists.isEmpty(games)}">Список игр пуст.</p>
+<hr/>
+<a href="javascript:void(0)" onclick="history.back();" class="btn btn-secondary">
+    &larr; Back
+</a>
+<br>
+</body>
+</html>

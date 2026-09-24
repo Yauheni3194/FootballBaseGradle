@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:sec="http://thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Game</title>
+</head>
+<body>
+<a href="/games">Show all games</a>
+<br>
+<a th:href="@{/games/{id}/changeGameAsAdmin(id=${game.getId()})}">Change game as admin</a>
+<hr>
+Place: <a th:href="@{/places/{id}(id=${place.getId()})}" th:text="${place.getName()}">game</a>
+<br>
+<a th:text="'Date: '+${game.getDate()}">game</a>
+<br>
+<a th:text="'Time: '+${game.getTime()}">game</a>
+<br>
+<a th:text="'Status: '+${game.getStatus()}">game</a>
+<br>
+<div th:if="${updateGame}" style="color: green;">
+    <p th:text="${updateGame}"></p>
+</div>
+<hr/>
+Участники:
+<ol th:if="${not #lists.isEmpty(players)}">
+    <li th:each="player : ${players}" th:text="${player.getName()}+' '+${player.getSurname()}"></li>
+</ol>
+<p th:if="${#lists.isEmpty(players)}">Никто не пришел</p>
+<br>
+<div style="display: flex; gap: 10px; align-items: center;">
+    <form th:method="POST" th:action="@{/games/{id}/addPlayer(id=${game.getId()})}">
+        <input type="submit" value="Пойти"/>
+    </form>
+
+    <form th:method="POST" th:action="@{/games/{id}/deletePlayer(id=${game.getId()})}">
+        <input type="submit" value="Отказаться от участия"/>
+    </form>
+</div>
+
+<div th:if="${error}" style="color: red; font-weight: bold;">
+    <p th:text="${error}"></p>
+</div>
+<div th:if="${success}" style="color: green;">
+    <p th:text="${success}"></p>
+</div>
+<hr/>
+<h3>Комментарии:</h3>
+<!-- Список комментариев -->
+<div th:if="${not #lists.isEmpty(comments)}">
+    <div th:each="comment : ${comments}" style="margin-bottom: 12px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9; max-width: 600px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.85em; color: #666; margin-bottom: 5px;">
+            <strong th:text="${comment.getPlayer().getName()} + ' ' + ${comment.getPlayer().getSurname()}">Автор</strong>
+            <span th:text="${#temporals.format(comment.getCreatedAt(), 'dd.MM.yyyy HH:mm')}">Дата</span>
+        </div>
+
+        <p th:text="${comment.getText()}" style="margin: 0 0 8px 0; white-space: pre-line; text-align: left;"></p>
+        <div th:if="${currentUser != null and (comment.getPlayer().getId() == currentUser.id)}">
+            <form th:method="POST" th:action="@{/games/{id}/deleteComment/{commentId}(id=${game.getId()}, commentId=${comment.getId()})}">
+                <input type="submit" value="Удалить" onclick="return confirm('Удалить комментарий?');"/>
+            </form>
+        </div>
+        <div sec:authorize="hasRole('ROLE_ADMIN')" th:if="${currentUser == null or comment.getPlayer().getId() != currentUser.getId()}">
+            <form th:method="POST" th:action="@{/games/{id}/deleteComment/{commentId}(id=${game.getId()}, commentId=${comment.getId()})}">
+                <input type="submit" value="Удалить (Админ)" onclick="return confirm('Удалить комментарий?');"/>
+            </form>
+        </div>
+    </div>
+</div>
+<br/>
+<div th:if="${deleteCommentError}" style="color: red; font-weight: bold;">
+    <p th:text="${deleteCommentError}"></p>
+</div>
+<div th:if="${deleteCommentSuccess}" style="color: green;">
+    <p th:text="${deleteCommentSuccess}"></p>
+</div>
+<!-- Простая форма: только Текст -->
+<form th:method="POST" th:action="@{/games/{id}/addComment(id=${game.getId()})}">
+    <label for="comment-text">Оставить комментарий:</label>
+    <br/>
+    <textarea id="comment-text" name="text" rows="3" required placeholder="Напишите ваш комментарий..." style="width: 100%; max-width: 500px; margin-top: 5px;"></textarea>
+    <br/>
+    <input type="submit" value="Отправить" style="margin-top: 5px;"/>
+</form>
+<div th:if="${comment_error}" style="color: red; font-weight: bold;">
+    <p th:text="${comment_error}"></p>
+</div>
+</body>
+</html>

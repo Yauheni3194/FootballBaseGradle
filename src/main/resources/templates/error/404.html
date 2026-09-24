@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Страница не найдена (404)</title>
+</head>
+<body>
+<h1>Упс! Ошибка 404</h1>
+<p>К сожалению, запрашиваемая страница не существует.</p>
+
+<!-- Spring Boot автоматически передает эти переменные в шаблон -->
+<div style="color: gray; margin-top: 20px;">
+  <p>Путь: <span th:text="${path}">/unknown</span></p>
+  <p>Точное время: <span th:text="${timestamp}">2026-08-17</span></p>
+</div>
+
+<a th:href="@{/}">Вернуться на главную</a>
+</body>
+</html>

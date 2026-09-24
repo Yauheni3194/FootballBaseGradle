@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Player</title>
+</head>
+<body>
+    <a th:text="${player.getName()}+' '+${player.getSurname()}">player</a>
+    <br>
+    <a th:text="${player.getAge()}+' y.o.'">player</a>
+    <br>
+    <a th:text="'City: '+${player.getCity()}">player</a>
+    <br>
+    became a player: <a th:text="${player.getCreated()}">player</a>
+    <br>
+    last update: <a th:text="${player.getUpdated()}">player</a>
+    <br/>
+    <a th:href="@{/players/games/{id}(id=${player.getId()})}">Show all players games</a>
+    <hr/>
+    <a th:href="@{/players/{id}/edit(id=${player.getId()})}">Edit</a>
+    <br/>
+    <hr/>
+    <form th:method="POST" th:action="@{/players/{id}/delete(id=${player.getId()})}">
+        <input type="submit" value="DELETE player" onclick="return confirm('Удалить игрока?');"/>
+        </form>
+    <hr/>
+    <a href="/players">Back</a>
+</body>
+</html>

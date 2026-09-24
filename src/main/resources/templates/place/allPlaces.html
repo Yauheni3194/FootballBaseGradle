@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Places</title>
+</head>
+<body>
+Места проведения игр:
+<div th:each="place : ${places}">
+  <a th:href="@{/places/{id}(id=${place.getId()})}" th:text="${place.getName()}">place</a>
+</div>
+<hr/>
+<a href="/">Back to main page</a>
+<hr/>
+<a href="/places/new">Create a new Place</a>
+</body>
+</html>

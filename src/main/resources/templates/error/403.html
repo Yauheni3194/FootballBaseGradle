@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Доступ запрещен</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"> <!-- Если есть стили -->
+</head>
+<body>
+<div style="text-align: center; margin-top: 100px;">
+  <h1>Ошибка 403</h1>
+  <h2>Упс! У вас нет прав для просмотра этой страницы. 🛑</h2>
+  <p>Эта зона предназначена только для администраторов.</p>
+  <a th:href="@{/}">Вернуться на главную</a>
+</div>
+</body>
+</html>

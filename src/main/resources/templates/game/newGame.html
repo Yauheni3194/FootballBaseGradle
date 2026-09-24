@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>New game</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/games}" th:object="${game}">
+  <!-- Новый блок для отображения глобальной ошибки из BindingResult -->
+  <div th:if="${#fields.hasGlobalErrors()}" style="color: red; font-weight: bold; margin-bottom: 15px;">
+    <!-- Перебираем глобальные ошибки и выводим их -->
+    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+  </div>
+  <label for="place">Выберите место:</label>
+  <select id="place" th:field="*{place}">
+    <option value="">-- Выберите место --</option>
+    <option th:each="p : ${places}"
+            th:value="${p.id}"
+            th:text="${p.name}">Место</option>
+  </select>
+  <div style="color:red" th:if="${#fields.hasErrors('place')}" th:errors="*{place}">Place Error</div>
+  <br>
+  <label for="date">Enter date: </label>
+  <input type="date" th:field="*{date}" id="date"/>
+  <div style="color:red" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date Error</div>
+  <br>
+  <label for="time">Enter time: </label>
+  <input type="time" th:field="*{time}" id="time"/>
+  <div style="color:red" th:if="${#fields.hasErrors('time')}" th:errors="*{time}">Time Error</div>
+  <br>
+  <input type="submit" value="Create!"/>
+</form>
+<a href="/games">Show all games</a>
+</body>
+</html>

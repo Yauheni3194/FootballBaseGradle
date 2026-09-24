@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All players</title>
+</head>
+<body>
+<div th:each="player, iterStat : ${players}">
+    <a th:href="@{/players/{id}(id=${player.id})}"
+       th:text="|${iterStat.count}. ${player.surname} ${player.name}|">player</a>
+</div>
+<hr/>
+<a href="/">Back to main page</a>
+<br>
+<hr/>
+<a href="/players/new">Create a new player</a>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:sec="http://thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>changeGameAsAdmin</title>
+</head>
+<body>
+<a th:href="@{/games/{id}/edit(id=${game.getId()})}">Edit</a>
+<br/>
+<div th:if="${updateGame}" style="color: green;">
+  <p th:text="${updateGame}"></p>
+</div>
+<hr/>
+<form th:method="POST" th:action="@{/games/{id}/delete(id=${game.getId()})}">
+  <input type="submit" value="Delete" onclick="return confirm('Удалить игру?');"/>
+</form>
+<hr/>
+Участники:
+<ol th:if="${not #lists.isEmpty(players)}">
+  <li th:each="player : ${players}" th:text="${player.getName()}+' '+${player.getSurname()}"></li>
+</ol>
+<p th:if="${#lists.isEmpty(players)}">Никто не пришел</p>
+<br>
+
+<div th:if="${error}" style="color: red; font-weight: bold;">
+  <p th:text="${error}"></p>
+</div>
+<div th:if="${success}" style="color: green;">
+  <p th:text="${success}"></p>
+</div>
+<hr/>
+<!-- Форма добавления игрока -->
+<form th:method="POST" th:action="@{/games/{id}/addPlayerAsAdmin(id=${game.getId()})}">
+  <label for="player-select">Добавить игрока в эту игру:</label>
+  <!-- Параметр name="playerId" — так мы поймаем ID игрока в Java-коде -->
+  <select name="playerId" id="player-select" required>
+    <option value="" th:if="${#lists.isEmpty(allFreePlayers)}">Все игроки уже добавлены</option>
+    <option value="" th:if="${!#lists.isEmpty(allFreePlayers)}">-- Выберите игрока --</option>
+    <!-- Цикл по списку игроков.
+         th:value отправляет ID выбранного игрока,
+         th:text показывает его имя в списке -->
+    <option th:each="player : ${allFreePlayers}"
+            th:value="${player.getId()}"
+            th:text="${player.getName()}+' '+${player.getSurname()}">
+      Имя игрока (заглушка)
+    </option>
+  </select>
+  <input type="submit" value="Пригласить в игру"/>
+</form>
+<br>
+<!-- Форма удаления игрока -->
+<form th:method="POST" th:action="@{/games/{id}/deletePlayerAsAdmin(id=${game.getId()})}">
+  <label for="player-select">Удалить игрока в из игры:</label>
+  <!-- Параметр name="playerId" — так мы поймаем ID игрока в Java-коде -->
+  <select name="playerId" id="player-delete" required>
+    <option value="" th:if="${#lists.isEmpty(players)}">Все игроки уже удалены</option>
+    <option value="" th:if="${!#lists.isEmpty(players)}">-- Выберите игрока --</option>
+    <!-- Цикл по списку игроков.
+         th:value отправляет ID выбранного игрока,
+         th:text показывает его имя в списке -->
+    <option th:each="player : ${players}"
+            th:value="${player.getId()}"
+            th:text="${player.getName()}+' '+${player.getSurname()}">
+      Имя игрока (заглушка)
+    </option>
+  </select>
+  <input type="submit" value="Удалить из игры"/>
+</form>
+<br>
+<a th:href="@{/games/{id}(id=${game.getId()})}">Back</a>
+</body>
+</html>

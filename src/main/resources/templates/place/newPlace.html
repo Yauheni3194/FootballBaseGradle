@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>New place</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/places}" th:object="${place}">
+  <!-- Новый блок для отображения глобальной ошибки из BindingResult -->
+  <div th:if="${#fields.hasGlobalErrors()}" style="color: red; font-weight: bold; margin-bottom: 15px;">
+    <!-- Перебираем глобальные ошибки и выводим их -->
+    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+  </div>
+  <label for="name">Enter name: </label>
+  <input type="text" th:field="*{name}" id="name"/>
+  <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+  <br/>
+  <label for="address">Enter address: </label>
+  <input type="text" th:field="*{address}" id="address"/>
+  <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</div>
+  <br/>
+  <label for="administrator_phone_number">Enter administrator_phone_number: </label>
+  <input type="text" th:field="*{administrator_phone_number}" id="administrator_phone_number"/>
+  <div style="color:red" th:if="${#fields.hasErrors('administrator_phone_number')}" th:errors="*{administrator_phone_number}">Administrator_phone_number Error</div>
+  <br/>
+  <input type="submit" value="Create!"/>
+</form>
+<a href="/places">Back</a>
+</body>
+</html>

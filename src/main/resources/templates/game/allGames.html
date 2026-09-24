@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Games</title>
+</head>
+<body>
+Игры:
+<div th:each="game : ${games}">
+    <a th:href="@{/games/{id}(id=${game.getId()})}" th:text="${game.getDate()}">game</a>
+</div>
+<hr/>
+<a href="/games/new">Create a new Game</a>
+<hr/>
+<a href="/">Back</a>
+</body>
+</html>
